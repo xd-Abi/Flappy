@@ -4,11 +4,12 @@ import lombok.Getter;
 import net.xdabi.flappy.config.RenderConfig;
 import net.xdabi.flappy.math.*;
 import net.xdabi.flappy.model.Mesh;
-import net.xdabi.flappy.model.Vertex;
 import net.xdabi.flappy.pipeline.ShaderProgram;
+import net.xdabi.flappy.scenegraph.RenderList;
+import net.xdabi.flappy.scenegraph.content.Background;
+import net.xdabi.flappy.scenegraph.content.Bird;
 import net.xdabi.flappy.util.MeshGenerator;
 import net.xdabi.flappy.util.ResourceLoader;
-import org.lwjgl.glfw.GLFW;
 
 public class Application implements Runnable {
 
@@ -20,8 +21,9 @@ public class Application implements Runnable {
 
     private RenderConfig renderConfig;
 
-    private Mesh mesh;
-    private ShaderProgram shaderProgram;
+    private RenderList renderList;
+
+    private Matrix4f worldMatrix;
 
     public Application() {
 
@@ -35,19 +37,15 @@ public class Application implements Runnable {
         input = new Input(window);
         renderConfig = new RenderConfig();
 
-        mesh = new Mesh();
-        MeshGenerator.createQuad(mesh);
-        shaderProgram = new ShaderProgram();
-        shaderProgram.addVertexShader(ResourceLoader.loadShader("shader/test-vertex.glsl"));
-        shaderProgram.addFragmentShader(ResourceLoader.loadShader("shader/test-fragment.glsl"));
-        shaderProgram.compile();
-        shaderProgram.addUniform("color");
-        shaderProgram.addUniform("worldMatrix");
+        renderList = new RenderList();
+        renderList.add(new Bird());
+        renderList.add(new Background());
 
+        worldMatrix = new Matrix4f().orthographicProjection(-10.0f, 10.0f, -10.0f * 9.0f / 16.0f, 10.0f * 9.0f / 16.0f, -1.0f, 1.0f);
     }
 
     private void shutdown() {
-        mesh.delete();
+        renderList.delete();
         window.destroy();
     }
 
@@ -56,9 +54,32 @@ public class Application implements Runnable {
 
         init();
 
+        long lastTime = System.nanoTime();
+        double delta = 0.0;
+        double ns = 1000000000.0 / 60.0; // Limited to 60 updates per second
+        long timer = System.currentTimeMillis();
+        int updates = 0;
+        int frames = 0;
+
         while (!window.isCloseRequested()) {
-            update();
+            long now = System.nanoTime();
+            delta += (now - lastTime) / ns;
+            lastTime = now;
+
+            if (delta >= 1.0) {
+                update();
+                updates++;
+                delta--;
+            }
             render();
+            frames++;
+
+            if (System.currentTimeMillis() - timer > 1000) {
+                timer += 1000;
+                System.out.println(updates + " ups, " + frames + " fps");
+                updates = 0;
+                frames = 0;
+            }
         }
 
         shutdown();
@@ -67,17 +88,12 @@ public class Application implements Runnable {
     private void update() {
         input.update();
         window.update();
-
+        renderList.update(input);
     }
 
     private void render() {
         renderConfig.enable();
-        shaderProgram.bind();
-        shaderProgram.setUniform("color", new Vec4f(1,0.3f,0.3f, 1f));
-        shaderProgram.setUniform("worldMatrix", new Transform().getWorldMatrix());
-
-        mesh.draw();
-        shaderProgram.unbind();
+        renderList.render(worldMatrix);
         renderConfig.disable();
         window.draw();
     }

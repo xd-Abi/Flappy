@@ -12,7 +12,7 @@ public class RenderConfig implements Config {
     @Override
     public void enable() {
         glEnable(GL_DEPTH_TEST);
-        glActiveTexture(GL_TEXTURE1);
+        glActiveTexture(GL_TEXTURE0);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

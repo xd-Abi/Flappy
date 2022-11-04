@@ -9,10 +9,10 @@ public class MeshGenerator {
 
     public static void createQuad(Mesh mesh) {
         mesh.create(new Vertex[]{
-                new Vertex(new Vec3f(-0.5f, 0.5f, 0), new Vec2f(0, 0)),
-                new Vertex(new Vec3f(-0.5f, -0.5f, 0), new Vec2f(0, 1)),
-                new Vertex(new Vec3f(0.5f, -0.5f, 0), new Vec2f(1, 1)),
-                new Vertex(new Vec3f(0.5f, 0.5f, 0), new Vec2f(1, 0)),
+                new Vertex(new Vec3f(-1f, 1f, 0), new Vec2f(0, 0)),
+                new Vertex(new Vec3f(-1f, -1f, 0), new Vec2f(0, 1)),
+                new Vertex(new Vec3f(1f, -1f, 0), new Vec2f(1, 1)),
+                new Vertex(new Vec3f(1f, 1f, 0), new Vec2f(1, 0)),
         }, new int[]{
                 0, 1, 3, 3, 1, 2
         });
