@@ -1,6 +1,7 @@
 package net.xdabi.flappy.kernel;
 
 import lombok.Getter;
+import net.xdabi.flappy.config.RenderConfig;
 import org.lwjgl.glfw.GLFW;
 
 public class Application implements Runnable {
@@ -10,6 +11,8 @@ public class Application implements Runnable {
 
     @Getter
     private Input input;
+
+    private RenderConfig renderConfig;
 
     public Application() {
 
@@ -21,6 +24,7 @@ public class Application implements Runnable {
         window.setVSync(false);
 
         input = new Input(window);
+        renderConfig = new RenderConfig();
     }
 
     private void shutdown() {
@@ -43,10 +47,13 @@ public class Application implements Runnable {
     private void update() {
         input.update();
         window.update();
-        
+
     }
 
     private void render() {
+        renderConfig.enable();
+        
+        renderConfig.disable();
         window.draw();
     }
 }
