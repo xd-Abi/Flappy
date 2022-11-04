@@ -1,10 +1,12 @@
 package net.xdabi.flappy.kernel;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.glViewport;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 
 public class Window {
@@ -48,7 +50,7 @@ public class Window {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        id = glfwCreateWindow(width, height, title, 0,0);
+        id = glfwCreateWindow(width, height, title, 0, 0);
 
         if (id == 0) {
             throw new RuntimeException("Failed to create window");
@@ -57,6 +59,17 @@ public class Window {
         glfwShowWindow(id);
         glfwMakeContextCurrent(id);
         GL.createCapabilities();
+
+        // callbacks
+        glfwSetWindowSizeCallback(id, new GLFWWindowSizeCallback() {
+            @Override
+            public void invoke(long window, int width, int height) {
+                setWidth(width);
+                setHeight(height);
+
+                glViewport(0, 0, width, height);
+            }
+        });
 
         windowCount++;
     }
