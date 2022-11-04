@@ -3,9 +3,11 @@ package net.xdabi.flappy.pipeline;
 import static org.lwjgl.opengl.GL20.*;
 
 import lombok.Getter;
+import net.xdabi.flappy.math.Matrix4f;
 import net.xdabi.flappy.math.Vec2f;
 import net.xdabi.flappy.math.Vec3f;
 import net.xdabi.flappy.math.Vec4f;
+import net.xdabi.flappy.util.BufferUtil;
 
 import java.util.HashMap;
 
@@ -95,5 +97,9 @@ public class ShaderProgram {
 
     public void setUniform(String uniformName, Vec4f value) {
         glUniform4f(uniforms.get(uniformName), value.getX(), value.getY(), value.getZ(), value.getW());
+    }
+
+    public void setUniform(String uniformName, Matrix4f value) {
+        glUniformMatrix4fv(uniforms.get(uniformName), true, BufferUtil.createFlippedBuffer(value));
     }
 }
