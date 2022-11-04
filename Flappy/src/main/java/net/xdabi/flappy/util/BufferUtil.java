@@ -67,13 +67,4 @@ public class BufferUtil {
 
         return buffer;
     }
-
-    public static ByteBuffer createByteBuffer(Matrix4f matrix) {
-
-        ByteBuffer byteBuffer = memAlloc(Float.BYTES * 16);
-        FloatBuffer floatBuffer = byteBuffer.asFloatBuffer();
-        floatBuffer.put(BufferUtil.createFlippedBuffer(matrix));
-
-        return byteBuffer;
-    }
 }

@@ -22,6 +22,14 @@ public class ShaderProgram {
         uniforms = new HashMap<>();
     }
 
+    public void delete() {
+        glUseProgram(0);
+
+        if (id != 0) {
+            glDeleteProgram(id);
+        }
+    }
+
     public void bind() {
         glUseProgram(id);
     }

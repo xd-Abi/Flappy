@@ -2,8 +2,7 @@ package net.xdabi.flappy.kernel;
 
 import lombok.Getter;
 import net.xdabi.flappy.config.RenderConfig;
-import net.xdabi.flappy.math.Vec2f;
-import net.xdabi.flappy.math.Vec3f;
+import net.xdabi.flappy.math.*;
 import net.xdabi.flappy.model.Mesh;
 import net.xdabi.flappy.model.Vertex;
 import net.xdabi.flappy.pipeline.ShaderProgram;
@@ -42,6 +41,9 @@ public class Application implements Runnable {
         shaderProgram.addVertexShader(ResourceLoader.loadShader("shader/test-vertex.glsl"));
         shaderProgram.addFragmentShader(ResourceLoader.loadShader("shader/test-fragment.glsl"));
         shaderProgram.compile();
+        shaderProgram.addUniform("color");
+        shaderProgram.addUniform("worldMatrix");
+
     }
 
     private void shutdown() {
@@ -71,6 +73,8 @@ public class Application implements Runnable {
     private void render() {
         renderConfig.enable();
         shaderProgram.bind();
+        shaderProgram.setUniform("color", new Vec4f(1,0.3f,0.3f, 1f));
+        shaderProgram.setUniform("worldMatrix", new Transform().getWorldMatrix());
 
         mesh.draw();
         shaderProgram.unbind();
