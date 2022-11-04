@@ -52,7 +52,7 @@ public class Application implements Runnable {
 
     private void render() {
         renderConfig.enable();
-        
+
         renderConfig.disable();
         window.draw();
     }
