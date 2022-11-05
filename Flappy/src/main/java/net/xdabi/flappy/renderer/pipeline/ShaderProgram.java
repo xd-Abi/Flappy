@@ -1,13 +1,15 @@
-package net.xdabi.flappy.pipeline;
+package net.xdabi.flappy.renderer.pipeline;
 
 import static org.lwjgl.opengl.GL20.*;
 
 import lombok.Getter;
 import net.xdabi.flappy.math.Matrix4f;
+import net.xdabi.flappy.renderer.Renderable;
+import net.xdabi.flappy.util.BufferUtil;
 import net.xdabi.flappy.math.Vec2f;
 import net.xdabi.flappy.math.Vec3f;
 import net.xdabi.flappy.math.Vec4f;
-import net.xdabi.flappy.util.BufferUtil;
+import org.lwjgl.opengl.GL20;
 
 import java.util.HashMap;
 
@@ -32,10 +34,6 @@ public class ShaderProgram {
 
     public void bind() {
         glUseProgram(id);
-    }
-
-    public void unbind() {
-        glUseProgram(0);
     }
 
     public void addUniform(String uniform) {
@@ -87,6 +85,8 @@ public class ShaderProgram {
         glAttachShader(id, shader);
     }
 
+    public void updateUniforms(Renderable parent) {}
+
     public void setUniform(String uniformName, int value) {
         glUniform1i(uniforms.get(uniformName), value);
     }
@@ -108,6 +108,6 @@ public class ShaderProgram {
     }
 
     public void setUniform(String uniformName, Matrix4f value) {
-        glUniformMatrix4fv(uniforms.get(uniformName), true, BufferUtil.createFlippedBuffer(value));
+        GL20.glUniformMatrix4fv(uniforms.get(uniformName), true, BufferUtil.createFlippedBuffer(value));
     }
 }

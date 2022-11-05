@@ -6,9 +6,9 @@ layout (location = 1) in vec2 uvCoord;
 out vec2 passUvCoord;
 
 uniform mat4 modelMatrix;
-uniform mat4 worldMatrix;
+uniform mat4 viewMatrix;
 
 void main() {
     passUvCoord = uvCoord;
-    gl_Position = worldMatrix * modelMatrix * vec4(position, 1);
+    gl_Position = viewMatrix * modelMatrix * vec4(position, 1);
 }

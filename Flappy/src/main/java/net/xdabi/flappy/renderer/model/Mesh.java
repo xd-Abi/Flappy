@@ -1,6 +1,7 @@
-package net.xdabi.flappy.model;
+package net.xdabi.flappy.renderer.model;
 
 import net.xdabi.flappy.util.BufferUtil;
+import org.lwjgl.opengl.GL15;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
@@ -27,7 +28,7 @@ public class Mesh {
         glBindVertexArray(vao);
 
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, BufferUtil.createFlippedBuffer(vertices), GL_STATIC_DRAW);
+        GL15.glBufferData(GL_ARRAY_BUFFER, BufferUtil.createFlippedBuffer(vertices), GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.BYTES, 0);
         glVertexAttribPointer(1, 2, GL_FLOAT, false, Vertex.BYTES, Float.BYTES * 3);
 

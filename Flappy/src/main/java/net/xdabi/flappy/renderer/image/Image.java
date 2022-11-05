@@ -1,13 +1,13 @@
-package net.xdabi.flappy.image;
+package net.xdabi.flappy.renderer.image;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL30.*;
 
 import lombok.Getter;
+import net.xdabi.flappy.renderer.scenegraph.NodeComponent;
 import net.xdabi.flappy.util.ImageLoader;
 
 @Getter
-public class Image {
+public class Image extends NodeComponent {
 
     private final int id;
     private final int width;
@@ -24,6 +24,7 @@ public class Image {
         glBindTexture(GL_TEXTURE_2D, id);
     }
 
+    @Override
     public void delete() {
         glDeleteTextures(id);
     }

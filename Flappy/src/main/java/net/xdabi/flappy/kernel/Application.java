@@ -1,17 +1,12 @@
 package net.xdabi.flappy.kernel;
 
 import lombok.Getter;
-import net.xdabi.flappy.config.RenderConfig;
-import net.xdabi.flappy.math.*;
-import net.xdabi.flappy.model.Mesh;
-import net.xdabi.flappy.pipeline.ShaderProgram;
-import net.xdabi.flappy.scenegraph.RenderList;
-import net.xdabi.flappy.scenegraph.content.Background;
-import net.xdabi.flappy.scenegraph.content.Bird;
-import net.xdabi.flappy.util.MeshGenerator;
-import net.xdabi.flappy.util.ResourceLoader;
+import net.xdabi.flappy.config.GlobalRenderConfig;
+import net.xdabi.flappy.renderer.Renderer;
 
 public class Application implements Runnable {
+
+    private static Application instance = null;
 
     @Getter
     private Window window;
@@ -19,14 +14,14 @@ public class Application implements Runnable {
     @Getter
     private Input input;
 
-    private RenderConfig renderConfig;
+    @Getter
+    private Renderer renderer;
 
-    private RenderList renderList;
+    @Getter
+    private boolean isRunning;
 
-    private Matrix4f worldMatrix;
-
-    public Application() {
-
+    protected Application() {
+        init();
     }
 
     private void init() {
@@ -35,24 +30,19 @@ public class Application implements Runnable {
         window.setVSync(false);
 
         input = new Input(window);
-        renderConfig = new RenderConfig();
+        renderer = new Renderer();
+        renderer.setGlobalConfig(new GlobalRenderConfig());
 
-        renderList = new RenderList();
-        renderList.add(new Bird());
-        renderList.add(new Background());
-
-        worldMatrix = new Matrix4f().orthographicProjection(-10.0f, 10.0f, -10.0f * 9.0f / 16.0f, 10.0f * 9.0f / 16.0f, -1.0f, 1.0f);
+        isRunning = true;
     }
 
     private void shutdown() {
-        renderList.delete();
+        renderer.deleteObjects();
         window.destroy();
     }
 
     @Override
     public void run() {
-
-        init();
 
         long lastTime = System.nanoTime();
         double delta = 0.0;
@@ -61,7 +51,7 @@ public class Application implements Runnable {
         int updates = 0;
         int frames = 0;
 
-        while (!window.isCloseRequested()) {
+        while (isRunning) {
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
@@ -74,6 +64,10 @@ public class Application implements Runnable {
             render();
             frames++;
 
+            if (window.isCloseRequested()) {
+                isRunning = false;
+            }
+
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
                 System.out.println(updates + " ups, " + frames + " fps");
@@ -82,19 +76,27 @@ public class Application implements Runnable {
             }
         }
 
+
         shutdown();
+
     }
 
     private void update() {
         input.update();
         window.update();
-        renderList.update(input);
+        renderer.update();
     }
 
     private void render() {
-        renderConfig.enable();
-        renderList.render(worldMatrix);
-        renderConfig.disable();
+        renderer.render();
         window.draw();
+    }
+
+    public static Application getInstance() {
+        if (instance == null) {
+            instance = new Application();
+        }
+
+        return instance;
     }
 }

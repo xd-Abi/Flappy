@@ -1,12 +1,9 @@
 package net.xdabi.flappy.util;
 
-import static org.lwjgl.system.MemoryUtil.memAlloc;
-
 import net.xdabi.flappy.math.Matrix4f;
-import net.xdabi.flappy.model.Vertex;
+import net.xdabi.flappy.renderer.model.Vertex;
 import org.lwjgl.BufferUtils;
 
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 

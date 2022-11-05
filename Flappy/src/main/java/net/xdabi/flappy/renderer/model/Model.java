@@ -1,8 +1,8 @@
-package net.xdabi.flappy.model;
+package net.xdabi.flappy.renderer.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.xdabi.flappy.pipeline.ShaderProgram;
+import net.xdabi.flappy.renderer.pipeline.ShaderProgram;
 
 @Getter
 @Setter

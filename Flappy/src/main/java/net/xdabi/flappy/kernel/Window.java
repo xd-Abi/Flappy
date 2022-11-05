@@ -58,6 +58,8 @@ public class Window {
 
         glfwShowWindow(id);
         glfwMakeContextCurrent(id);
+        glfwSetWindowSizeLimits(id, 1280, 700, GLFW_DONT_CARE, GLFW_DONT_CARE);
+        glfwSetWindowAspectRatio(id, 16, 9);
         GL.createCapabilities();
 
         // callbacks
