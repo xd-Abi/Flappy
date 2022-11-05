@@ -11,11 +11,10 @@ import net.xdabi.flappy.util.MeshGenerator;
 
 public class Background extends Renderable {
 
-    public static final int DRAW_AMOUNT = 4;
+    public static final int MAX_DRAW_INDEX = 3;
 
     @Getter
     private int xScroll = 0;
-
 
     public Background() {
         super();
@@ -32,6 +31,10 @@ public class Background extends Renderable {
     @Override
     public void update() {
         super.update();
+
+        if (xScroll == -1250) {
+            xScroll = 0;
+        }
 
         xScroll--;
     }

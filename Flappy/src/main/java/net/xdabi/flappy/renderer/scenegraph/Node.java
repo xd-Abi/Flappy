@@ -37,6 +37,11 @@ public class Node {
         children.add(child);
     }
 
+    public void removeChild(Node child) {
+        child.setParent(null);
+        children.remove(child);
+    }
+
     public void update() {
         children.forEach(Node::update);
     }

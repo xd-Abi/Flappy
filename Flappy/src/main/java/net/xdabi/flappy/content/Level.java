@@ -2,6 +2,8 @@ package net.xdabi.flappy.content;
 
 import lombok.Getter;
 import net.xdabi.flappy.content.background.Background;
+import net.xdabi.flappy.content.effects.VignetteEffect;
+import net.xdabi.flappy.content.pipe.PipeGenerator;
 import net.xdabi.flappy.kernel.Application;
 import net.xdabi.flappy.kernel.Input;
 import net.xdabi.flappy.kernel.Window;
@@ -29,8 +31,9 @@ public class Level extends Renderable {
         addComponent(NodeComponentType.CAMERA, new Camera(orthographicProjection));
 
         addChild(new Background());
+        addChild(new PipeGenerator());
+        addChild(new VignetteEffect());
         addChild(new Bird());
-
 
         // When the window aspect ratio changes, the game objects need to change their aspect ratios.
         // At the moment, there is no way event callback system. Therefore, we need to check the current aspect ratio of the window
@@ -49,5 +52,6 @@ public class Level extends Renderable {
         if (isGameStarted) {
             super.update();
         }
+
     }
 }

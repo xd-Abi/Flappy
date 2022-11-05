@@ -24,6 +24,7 @@ public class Bird extends Renderable {
 
         input = Application.getInstance().getInput();
 
+        getWorldTransform().getTranslation().setZ(0.05f);
         getWorldTransform().setScaling(new Vec3f(0.6f));
         Mesh mesh = MeshGenerator.createQuad();
         RenderInfo renderInfo = new RenderInfo(new BirdRenderConfig(), new BirdShader(), mesh);

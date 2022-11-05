@@ -1,7 +1,6 @@
-package net.xdabi.flappy.content.background;
+package net.xdabi.flappy.content.pipe;
 
 import net.xdabi.flappy.math.Transform;
-import net.xdabi.flappy.math.Vec3f;
 import net.xdabi.flappy.renderer.Camera;
 import net.xdabi.flappy.renderer.Renderable;
 import net.xdabi.flappy.renderer.image.Image;
@@ -9,13 +8,13 @@ import net.xdabi.flappy.renderer.pipeline.ShaderProgram;
 import net.xdabi.flappy.renderer.scenegraph.NodeComponentType;
 import net.xdabi.flappy.util.ResourceLoader;
 
-public class BackgroundShader extends ShaderProgram {
+public class PipeGeneratorShader extends ShaderProgram {
 
-    public BackgroundShader() {
+    public PipeGeneratorShader() {
         super();
 
-        addVertexShader(ResourceLoader.loadShader("shaders/bg.vert"));
-        addFragmentShader(ResourceLoader.loadShader("shaders/bg.frag"));
+        addVertexShader(ResourceLoader.loadShader("shaders/pipe.vert"));
+        addFragmentShader(ResourceLoader.loadShader("shaders/pipe.frag"));
         compile();
 
         addUniform("modelMatrix");
@@ -34,11 +33,11 @@ public class BackgroundShader extends ShaderProgram {
         Image texture = parent.getComponent(NodeComponentType.TEXTURE);
         texture.noFilter();
         texture.bind();
+
     }
 
-    public void updateUniforms(Background background, int bgIndex) {
-        Transform transform = background.getWorldTransform();
-        transform.setTranslation(new Vec3f(bgIndex * 10 + background.getXScroll() * 0.008f, 0.0f, 0.1f));
+    public void updateUniforms(PipeGenerator parent, int bgIndex) {
+        Transform transform = parent.getChildren().get(bgIndex).getWorldTransform();
         setUniform("modelMatrix", transform.getWorldMatrix());
         setUniform("sampler", 1);
     }
