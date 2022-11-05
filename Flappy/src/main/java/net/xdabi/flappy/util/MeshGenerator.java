@@ -21,14 +21,17 @@ public class MeshGenerator {
         return mesh;
     }
 
-    public static void createRectangle(Mesh mesh, float x, float y) {
+    public static Mesh createRectangle(float width, float height) {
+        Mesh mesh = new Mesh();
         mesh.create(new Vertex[]{
-                new Vertex(new Vec3f(-x, -y, 0), new Vec2f(0, 1)),
-                new Vertex(new Vec3f(-x, y, 0), new Vec2f(0, 0)),
-                new Vertex(new Vec3f(0, y, 0), new Vec2f(1, 0)),
-                new Vertex(new Vec3f(0, -y, 0), new Vec2f(1, 1)),
+                new Vertex(new Vec3f(-width, -height, 0), new Vec2f(0, 1)),
+                new Vertex(new Vec3f(-width, height, 0), new Vec2f(0, 0)),
+                new Vertex(new Vec3f(0, height, 0), new Vec2f(1, 0)),
+                new Vertex(new Vec3f(0, -height, 0), new Vec2f(1, 1)),
         }, new int[]{
                 0, 1, 3, 3, 1, 2
         });
+
+        return mesh;
     }
 }

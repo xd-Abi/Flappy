@@ -1,4 +1,4 @@
-package net.xdabi;
+package net.xdabi.flappy;
 
 
 import net.xdabi.flappy.content.Level;

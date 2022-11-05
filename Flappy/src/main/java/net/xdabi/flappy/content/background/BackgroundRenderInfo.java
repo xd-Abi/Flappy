@@ -20,7 +20,7 @@ public class BackgroundRenderInfo extends RenderInfo {
         getShader().bind();
         getShader().updateUniforms(parent);
 
-        for (int i = 0; i < parent.getDrawAmount() + 4; i++) {
+        for (int i = 0; i < Background.DRAW_AMOUNT; i++) {
             ((BackgroundShader) getShader()).updateUniforms(parent, i);
             getMesh().draw();
         }

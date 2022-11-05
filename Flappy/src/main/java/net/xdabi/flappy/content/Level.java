@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.xdabi.flappy.content.background.Background;
 import net.xdabi.flappy.kernel.Application;
 import net.xdabi.flappy.kernel.Input;
+import net.xdabi.flappy.kernel.Window;
 import net.xdabi.flappy.math.Matrix4f;
 import net.xdabi.flappy.renderer.Camera;
 import net.xdabi.flappy.renderer.Renderable;
@@ -25,11 +26,18 @@ public class Level extends Renderable {
         input = Application.getInstance().getInput();
 
         Matrix4f orthographicProjection = new Matrix4f().orthographicProjection(-10.0f, 10.0f, -10.0f * 9.0f / 16.0f, 10.0f * 9.0f / 16.0f, -1.0f, 1.0f);
-
         addComponent(NodeComponentType.CAMERA, new Camera(orthographicProjection));
 
         addChild(new Background());
         addChild(new Bird());
+
+
+        // When the window aspect ratio changes, the game objects need to change their aspect ratios.
+        // At the moment, there is no way event callback system. Therefore, we need to check the current aspect ratio of the window
+        // and change the aspect ratio properly to be 16:9
+        Window window = Application.getInstance().getWindow();
+        GLFW.glfwSetWindowSizeLimits(window.getId(), 1280, 700, GLFW.GLFW_DONT_CARE, GLFW.GLFW_DONT_CARE);
+        GLFW.glfwSetWindowAspectRatio(window.getId(), 16, 9);
     }
 
     @Override

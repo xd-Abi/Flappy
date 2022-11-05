@@ -13,6 +13,9 @@ import org.lwjgl.glfw.GLFW;
 
 public class Bird extends Renderable {
 
+    public static final float FALL_SPEED = 0.01f;
+    public static final float JUMP_VELOCITY  = 0.15f;
+
     private final Input input;
     private float delta = 0.0f;
 
@@ -37,10 +40,10 @@ public class Bird extends Renderable {
         getWorldTransform().getTranslation().setY(getWorldTransform().getTranslation().getY() - delta);
 
         if (input.isKeyPushed(GLFW.GLFW_KEY_SPACE)) {
-            delta = -0.15f;
+            delta = -JUMP_VELOCITY;
         }
         else {
-            delta += 0.01f;
+            delta += FALL_SPEED;
         }
         getWorldTransform().setRotation(new Vec3f(0, 0, -0.2f * -delta * 10));
     }
