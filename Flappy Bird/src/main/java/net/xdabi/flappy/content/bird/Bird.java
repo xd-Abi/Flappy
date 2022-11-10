@@ -14,25 +14,27 @@ import net.xdabi.flappy.engine.utils.MeshGenerator;
 
 public class Bird extends Renderable {
 
-    public static final float FALL_SPEED = 0.01f;
-    public static final float JUMP_VELOCITY = 0.15f;
-
+    private final float fallSpeed;
+    private final float jumpVelocity;
     private final Input input;
+
     private float delta = 0.0f;
 
-    public Bird() {
+
+    public Bird(Image texture, float fallSpeed, float jumpVelocity) {
         super();
 
-        input = FlappyApplication.getInstance().getInput();
+        this.fallSpeed = fallSpeed;
+        this.jumpVelocity = jumpVelocity;
+        this.input = FlappyApplication.getInstance().getInput();
 
         getWorldTransform().getTranslation().setZ(0.05f);
         Mesh mesh = MeshGenerator.createQuad();
         MeshBuffer meshBuffer = new MeshBuffer(mesh);
         RenderInfo renderInfo = new RenderInfo(new BirdRenderConfig(), new BirdShader(), meshBuffer);
-        Image image = new Image("images/bird.png");
 
         addComponent(NodeComponentType.RENDER_INFO, renderInfo);
-        addComponent(NodeComponentType.TEXTURE, image);
+        addComponent(NodeComponentType.TEXTURE, texture);
     }
 
     @Override
@@ -42,9 +44,9 @@ public class Bird extends Renderable {
         getWorldTransform().getTranslation().setY(getWorldTransform().getTranslation().getY() - delta);
 
         if (input.isKeyPushed(KeyCode.SPACE)) {
-            delta = -JUMP_VELOCITY;
+            delta = -jumpVelocity;
         } else {
-            delta += FALL_SPEED;
+            delta += fallSpeed;
         }
 
         getWorldTransform().setRotation(new Vec3f(0,0, -0.2f * -delta * .0f));
@@ -57,6 +59,6 @@ public class Bird extends Renderable {
             getWorldTransform().getTranslation().setY(getWorldTransform().getTranslation().getY() - delta);
         }
 
-        delta += FALL_SPEED;
+        delta += 0.01f;
     }
 }

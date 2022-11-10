@@ -4,6 +4,10 @@ import lombok.Getter;
 import net.xdabi.flappy.FlappyApplication;
 import net.xdabi.flappy.content.background.Background;
 import net.xdabi.flappy.content.bird.Bird;
+import net.xdabi.flappy.content.bird.types.DefaultBird;
+import net.xdabi.flappy.content.bird.types.ReversyBird;
+import net.xdabi.flappy.content.bird.types.StrongBird;
+import net.xdabi.flappy.content.bird.types.WeakBird;
 import net.xdabi.flappy.content.effects.VignetteEffect;
 import net.xdabi.flappy.content.pipe.PipeGenerator;
 import net.xdabi.flappy.engine.input.Input;
@@ -13,7 +17,7 @@ import net.xdabi.flappy.engine.scenegraph.Renderable;
 
 public class Level extends Renderable {
 
-    private final Bird bird;
+    private Bird bird;
     private final PipeGenerator pipeGenerator;
 
     private final Input input;
@@ -25,7 +29,7 @@ public class Level extends Renderable {
         super();
 
         input = FlappyApplication.getInstance().getInput();
-        bird = new Bird();
+        bird = new DefaultBird();
         pipeGenerator = new PipeGenerator();
         gameState = GameState.MENU;
 
@@ -42,7 +46,17 @@ public class Level extends Renderable {
 
         switch (gameState) {
             case MENU -> {
-                if (input.isKeyPushed(KeyCode.SPACE)) {
+                if (input.isKeyPushed(KeyCode.NUM_1)) {
+                    changeBird(new DefaultBird());
+                } else if (input.isKeyPushed(KeyCode.NUM_2)) {
+                    changeBird(new StrongBird());
+                }
+                else if (input.isKeyPushed(KeyCode.NUM_3)) {
+                    changeBird(new WeakBird());
+                }
+                else  if(input.isKeyPushed(KeyCode.NUM_4)) {
+                    changeBird(new ReversyBird());
+                } else if (input.isKeyPushed(KeyCode.SPACE)) {
                     gameState = GameState.PLAYING;
                 }
             }
@@ -55,8 +69,19 @@ public class Level extends Renderable {
             }
             case DEATH -> {
                 bird.death();
+
             }
         }
+    }
+
+    private void changeBird(Bird bird) {
+        if (this.bird == bird) {
+            return;
+        }
+
+        int index = getChildren().indexOf(this.bird);
+        this.bird = bird;
+        getChildren().set(index, this.bird);
     }
 
     private boolean checkCollision() {
