@@ -1,6 +1,7 @@
 package net.xdabi.flappy.content.bird;
 
 import net.xdabi.flappy.FlappyApplication;
+import net.xdabi.flappy.engine.audio.Audio;
 import net.xdabi.flappy.engine.input.Input;
 import net.xdabi.flappy.engine.input.KeyCode;
 import net.xdabi.flappy.engine.math.Vec3f;
@@ -18,14 +19,16 @@ public class Bird extends Renderable {
     private final float jumpVelocity;
     private final Input input;
 
-    private float delta = 0.0f;
+    private final Audio flapSound;
 
+    private float delta = 0.0f;
 
     public Bird(Image texture, float fallSpeed, float jumpVelocity) {
         super();
 
         this.fallSpeed = fallSpeed;
         this.jumpVelocity = jumpVelocity;
+        this.flapSound = new Audio("sounds/flap.wav");
         this.input = FlappyApplication.getInstance().getInput();
 
         getWorldTransform().getTranslation().setZ(0.05f);
@@ -45,6 +48,7 @@ public class Bird extends Renderable {
 
         if (input.isKeyPushed(KeyCode.SPACE)) {
             delta = -jumpVelocity;
+            flapSound.play();
         } else {
             delta += fallSpeed;
         }
@@ -60,5 +64,11 @@ public class Bird extends Renderable {
         }
 
         delta += 0.01f;
+    }
+
+    @Override
+    public void delete() {
+        super.delete();
+        flapSound.delete();
     }
 }

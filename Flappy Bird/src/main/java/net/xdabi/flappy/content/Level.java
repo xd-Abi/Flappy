@@ -10,6 +10,7 @@ import net.xdabi.flappy.content.bird.types.StrongBird;
 import net.xdabi.flappy.content.bird.types.WeakBird;
 import net.xdabi.flappy.content.effects.VignetteEffect;
 import net.xdabi.flappy.content.pipe.PipeGenerator;
+import net.xdabi.flappy.engine.audio.Audio;
 import net.xdabi.flappy.engine.input.Input;
 import net.xdabi.flappy.engine.input.KeyCode;
 import net.xdabi.flappy.engine.math.Transform;
@@ -25,6 +26,8 @@ public class Level extends Renderable {
 
     private final Input input;
 
+    private final Audio bgSound;
+
     @Getter
     private GameState gameState;
 
@@ -36,6 +39,8 @@ public class Level extends Renderable {
         pipeGenerator = new PipeGenerator();
         vignetteEffect = new VignetteEffect();
         gameState = GameState.MENU;
+        bgSound = new Audio("sounds/bg.wav");
+        bgSound.setLoop(true);
 
         addChild(new Background());
         addChild(pipeGenerator);
@@ -52,14 +57,13 @@ public class Level extends Renderable {
                     changeBird(new DefaultBird());
                 } else if (input.isKeyPushed(KeyCode.NUM_2)) {
                     changeBird(new StrongBird());
-                }
-                else if (input.isKeyPushed(KeyCode.NUM_3)) {
+                } else if (input.isKeyPushed(KeyCode.NUM_3)) {
                     changeBird(new WeakBird());
-                }
-                else  if(input.isKeyPushed(KeyCode.NUM_4)) {
+                } else if (input.isKeyPushed(KeyCode.NUM_4)) {
                     changeBird(new ReversyBird());
                 } else if (input.isKeyPushed(KeyCode.SPACE)) {
                     gameState = GameState.PLAYING;
+                    bgSound.play();
                 }
             }
             case PLAYING -> {
@@ -71,7 +75,8 @@ public class Level extends Renderable {
             }
             case DEATH -> {
                 bird.death();
-                vignetteEffect.animateToColor(new Vec3f(0.075f,0.0005f, 0.0005f));
+                bgSound.stop();
+                vignetteEffect.animateToColor(new Vec3f(0.075f, 0.0005f, 0.0005f));
             }
         }
     }
@@ -118,4 +123,9 @@ public class Level extends Renderable {
         return false;
     }
 
+    @Override
+    public void delete() {
+        super.delete();
+        bgSound.delete();
+    }
 }

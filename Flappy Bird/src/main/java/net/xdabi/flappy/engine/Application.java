@@ -1,6 +1,7 @@
 package net.xdabi.flappy.engine;
 
 import lombok.Getter;
+import net.xdabi.flappy.engine.audio.AudioConfig;
 import net.xdabi.flappy.engine.device.Window;
 import net.xdabi.flappy.engine.input.Input;
 import net.xdabi.flappy.engine.renderer.Renderer;
@@ -16,6 +17,8 @@ public class Application implements Runnable {
     @Getter
     private final Renderer renderer;
 
+    private final AudioConfig audioConfig;
+
     @Getter
     private boolean isRunning = true;
 
@@ -29,6 +32,9 @@ public class Application implements Runnable {
         window.addListener(input);
         window.addListener(renderer);
 
+        audioConfig = new AudioConfig();
+        audioConfig.enable();
+
         onInit(window, renderer);
     }
 
@@ -38,6 +44,7 @@ public class Application implements Runnable {
 
     private void shutdown() {
         onShutdown();
+        audioConfig.disable();
         window.destroy();
     }
 
