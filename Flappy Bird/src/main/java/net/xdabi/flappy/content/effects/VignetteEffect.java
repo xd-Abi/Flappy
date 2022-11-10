@@ -1,5 +1,7 @@
 package net.xdabi.flappy.content.effects;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.xdabi.flappy.engine.math.Vec2f;
 import net.xdabi.flappy.engine.math.Vec3f;
 import net.xdabi.flappy.engine.renderer.Mesh;
@@ -11,8 +13,16 @@ import net.xdabi.flappy.engine.scenegraph.Renderable;
 
 public class VignetteEffect extends Renderable {
 
+    @Getter
+    @Setter
+    private Vec3f color;
+
+    private float colorChangeDelta;
+
     public VignetteEffect() {
         super();
+
+        color = new Vec3f();
 
         getWorldTransform().getTranslation().setZ(0.07f);
         Mesh mesh = new Mesh(new Vertex[]{
@@ -29,6 +39,15 @@ public class VignetteEffect extends Renderable {
 
 
         addComponent(NodeComponentType.RENDER_INFO, renderInfo);
+    }
+
+    public void animateToColor(Vec3f color) {
+        if (colorChangeDelta == 1) {
+            return;
+        }
+
+        setColor(color.mul(colorChangeDelta));
+        colorChangeDelta += 0.05f;
     }
 
 }

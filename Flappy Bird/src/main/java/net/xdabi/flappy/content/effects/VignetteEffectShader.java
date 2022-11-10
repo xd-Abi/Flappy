@@ -20,6 +20,7 @@ public class VignetteEffectShader extends ShaderProgram {
         addUniform("modelMatrix");
         addUniform("viewMatrix");
         addUniform("resolution");
+        addUniform("color");
     }
 
     @Override
@@ -28,5 +29,6 @@ public class VignetteEffectShader extends ShaderProgram {
         setUniform("resolution", new Vec2f(window.getWidth(), window.getHeight()));
         setUniform("modelMatrix", parent.getWorldTransform().getWorldMatrix());
         setUniform("viewMatrix", StaticCamera.PROJECTION);
+        setUniform("color", ((VignetteEffect)parent).getColor());
     }
 }

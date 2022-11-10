@@ -13,12 +13,15 @@ import net.xdabi.flappy.content.pipe.PipeGenerator;
 import net.xdabi.flappy.engine.input.Input;
 import net.xdabi.flappy.engine.input.KeyCode;
 import net.xdabi.flappy.engine.math.Transform;
+import net.xdabi.flappy.engine.math.Vec3f;
 import net.xdabi.flappy.engine.scenegraph.Renderable;
 
 public class Level extends Renderable {
 
     private Bird bird;
     private final PipeGenerator pipeGenerator;
+
+    private final VignetteEffect vignetteEffect;
 
     private final Input input;
 
@@ -31,14 +34,13 @@ public class Level extends Renderable {
         input = FlappyApplication.getInstance().getInput();
         bird = new DefaultBird();
         pipeGenerator = new PipeGenerator();
+        vignetteEffect = new VignetteEffect();
         gameState = GameState.MENU;
 
         addChild(new Background());
         addChild(pipeGenerator);
         addChild(bird);
-
-        // Effects
-        addChild(new VignetteEffect());
+        addChild(vignetteEffect);
     }
 
     @Override
@@ -69,7 +71,7 @@ public class Level extends Renderable {
             }
             case DEATH -> {
                 bird.death();
-
+                vignetteEffect.animateToColor(new Vec3f(0.075f,0.0005f, 0.0005f));
             }
         }
     }

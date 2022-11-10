@@ -55,7 +55,7 @@ public class Bird extends Renderable {
 
     public void death() {
 
-        if (getWorldTransform().getTranslation().getY() > -9.5f) {
+        if (getWorldTransform().getTranslation().getY() > -11f) {
             getWorldTransform().getTranslation().setY(getWorldTransform().getTranslation().getY() - delta);
         }
 
